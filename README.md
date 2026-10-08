@@ -7,6 +7,22 @@ XBoard Telegram 插件合集，使用 XBoard 主 Telegram 机器人。
 | TgAiAssistant | 1.2.6 | AI 问答、知识库、群聊记忆、违规审核与管理员通知 | [使用说明](TgAiAssistant/TgAiAssistant/README.md) |
 | TgGroupCheckin | 1.0.2 | 私聊与群聊签到、随机流量奖励 | [使用说明](TgGroupCheckin/TgGroupCheckin/README.md) |
 
+## 界面预览
+
+### 插件列表
+
+![XBoard 插件列表：AI 助手与 Telegram 群签到](docs/images/plugins-overview.png)
+
+### AI 助手配置
+
+API 地址与 API Key 已在截图中打码。
+
+![TgAiAssistant 配置界面](docs/images/ai-assistant-settings.png)
+
+### Telegram 群签到配置
+
+![Telegram 群签到配置界面](docs/images/group-checkin-settings.png)
+
 ## 下载与安装
 
 在本仓库的 [Releases](https://github.com/jokervvtop-design/xb_plugin/releases) 下载对应插件的 ZIP 文件，上传到 XBoard 后台插件页安装并启用。两个插件可独立安装，详细依赖、配置和限制见各插件文档。
