@@ -51,3 +51,10 @@ API 地址与 API Key 已在截图中打码。
 采用 [MIT 许可证](LICENSE)。各插件原有版权与许可证声明保留；XBoard 和其他依赖遵循各自许可证。
 
 请勿提交真实 API Key、Bot Token、订阅链接或用户数据。使用前请阅读各插件文档中的数据说明和已知限制。
+
+## 友链aff
+汇沣支付(易支付 epay) 安全 & 便捷的收款解决方案！
+TG开户机器人：https://t.me/Huifeng_sup_bot?start=1399
+
+## 友情赞助(tron20)：
+TToYDU584SW3hCRDvQoERVfg2bphvG6sn5
