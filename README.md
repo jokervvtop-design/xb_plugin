@@ -9,7 +9,7 @@ XBoard Telegram 插件合集，使用 XBoard 主 Telegram 机器人。
 
 ## 下载与安装
 
-在本仓库的 [Releases](../../releases) 下载对应插件的 ZIP 文件，上传到 XBoard 后台插件页安装并启用。两个插件可独立安装，详细依赖、配置和限制见各插件文档。
+在本仓库的 [Releases](https://github.com/jokervvtop-design/xb_plugin/releases) 下载对应插件的 ZIP 文件，上传到 XBoard 后台插件页安装并启用。两个插件可独立安装，详细依赖、配置和限制见各插件文档。
 
 仓库保留原目录结构：实际插件源码位于 `TgAiAssistant/TgAiAssistant/` 和 `TgGroupCheckin/TgGroupCheckin/`。首版原始安装包保存在 `releases/v1.0.0/`，也会作为 `v1.0.0` Release 附件发布。请下载插件附件进行安装。
 
