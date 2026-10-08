@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+__pycache__/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+vendor/
+node_modules/

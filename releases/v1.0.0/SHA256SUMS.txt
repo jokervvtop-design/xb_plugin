@@ -1,0 +1,2 @@
+f2d33e90e8f622a0853a83e957d60d1ccda748063466df625fb173f9738af807  TgAiAssistant-v1.2.6-open-source.zip
+bfb3470b531e61ebc3810c83c2123d62d9a8de80f7bd3db661e06952a1de0344  TgGroupCheckin-v1.0.2-open-source.zip

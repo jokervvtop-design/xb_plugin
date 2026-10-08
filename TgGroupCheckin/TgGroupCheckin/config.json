@@ -1,0 +1,85 @@
+{
+    "name": "Telegram 群签到",
+    "code": "tg_group_checkin",
+    "type": "feature",
+    "version": "1.0.2",
+    "description": "监听 Telegram 私聊/群消息，用户发送签到关键词后按概率奖励流量。需配合 Telegram Bot 集成插件使用。",
+    "author": "www.xhj.me",
+    "require": {
+        "xboard": ">=1.0.0"
+    },
+    "config": {
+        "enable_checkin": {
+            "type": "boolean",
+            "default": true,
+            "label": "开启签到",
+            "description": "是否启用签到功能"
+        },
+        "enable_private_checkin": {
+            "type": "boolean",
+            "default": true,
+            "label": "允许私聊签到",
+            "description": "是否允许用户在私聊机器人时签到"
+        },
+        "enable_group_checkin": {
+            "type": "boolean",
+            "default": true,
+            "label": "允许群内签到",
+            "description": "是否允许用户在 Telegram 群内签到"
+        },
+        "checkin_keyword": {
+            "type": "string",
+            "default": "签到",
+            "label": "签到关键词",
+            "description": "用户在群内发送此文本时触发签到（完全匹配，忽略首尾空格）"
+        },
+        "reward_probability": {
+            "type": "number",
+            "default": 30,
+            "label": "中奖概率(%)",
+            "description": "签到后获得流量奖励的概率，0-100"
+        },
+        "reward_traffic_min_mb": {
+            "type": "number",
+            "default": 50,
+            "label": "奖励流量下限(MB)",
+            "description": "中奖后随机发放流量的最小值，单位 MB"
+        },
+        "reward_traffic_max_mb": {
+            "type": "number",
+            "default": 200,
+            "label": "奖励流量上限(MB)",
+            "description": "中奖后随机发放流量的最大值，单位 MB"
+        },
+        "daily_once": {
+            "type": "boolean",
+            "default": true,
+            "label": "每日限签一次",
+            "description": "同一 Telegram 用户每天只能签到一次"
+        },
+        "reply_not_bound": {
+            "type": "text",
+            "default": "❌ 您尚未绑定账号，请私聊机器人发送 /bind 绑定后再签到",
+            "label": "未绑定提示",
+            "description": "用户未绑定 XBoard 账号时的回复"
+        },
+        "reply_already_checked": {
+            "type": "text",
+            "default": "⏰ 今日已签到，请明天再来",
+            "label": "已签到提示",
+            "description": "用户今日已签到时的回复"
+        },
+        "reply_miss": {
+            "type": "text",
+            "default": "😢 签到未中奖，祝下次好运",
+            "label": "未中奖提示",
+            "description": "签到成功但未抽中流量时的回复"
+        },
+        "reply_success": {
+            "type": "text",
+            "default": "🎉 签到成功！获得 {traffic}MB 流量",
+            "label": "中奖提示",
+            "description": "中奖回复，{traffic} 会替换为实际奖励流量"
+        }
+    }
+}

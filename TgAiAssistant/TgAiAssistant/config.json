@@ -1,0 +1,199 @@
+{
+  "name": "TgAiAssistant",
+  "code": "tg_ai_assistant",
+  "type": "feature",
+  "version": "1.2.6",
+  "description": "XBoard Telegram AI 助手：知识库问答、群聊违规审核、自动删消息禁言。需配合 Telegram Bot 集成插件使用。",
+  "author": "www.xhj.me",
+  "require": {
+    "xboard": ">=1.0.0"
+  },
+  "config": {
+    "llm_api_base": {
+      "type": "string",
+      "default": "https://api.openai.com/v1",
+      "label": "【公共配置】API 地址",
+      "description": "问答与违规审核共用的 OpenAI 兼容接口 Base URL"
+    },
+    "llm_api_key": {
+      "type": "string",
+      "default": "",
+      "label": "【公共配置】API Key",
+      "description": "问答与违规审核共用的 API Key，只需在此填写一次"
+    },
+    "llm_model": {
+      "type": "string",
+      "default": "gpt-4o-mini",
+      "label": "【公共配置】默认模型",
+      "description": "AI 问答使用此模型；违规审核未指定独立模型时也使用此模型"
+    },
+    "admin_telegram_ids": {
+      "type": "text",
+      "default": "[]",
+      "label": "【公共配置】通知接收 Telegram ID",
+      "description": "JSON 数组，如 [123456789]；填写个人数字 ID，机器人用户名无效。[] 时通知已绑定 Telegram 的 XBoard 管理员。接收人需先私聊机器人发送 /start"
+    },
+    "enable_ai": {
+      "type": "boolean",
+      "default": true,
+      "label": "【AI 问答】开启问答",
+      "description": "控制 /ask、@机器人及私聊自由文本问答，不影响违规审核"
+    },
+    "enable_private": {
+      "type": "boolean",
+      "default": true,
+      "label": "【AI 问答】私聊问答",
+      "description": "是否允许私聊中使用 AI"
+    },
+    "enable_group": {
+      "type": "boolean",
+      "default": false,
+      "label": "【AI 问答】群聊问答",
+      "description": "允许群内 /ask 或 @机器人触发问答，不影响群聊记忆及违规审核"
+    },
+    "enable_free_text": {
+      "type": "boolean",
+      "default": false,
+      "label": "【AI 问答】自由文本触发",
+      "description": "私聊中非命令文本也触发 AI（谨慎开启）"
+    },
+    "require_bind": {
+      "type": "boolean",
+      "default": false,
+      "label": "【AI 问答】必须绑定账号",
+      "description": "是否要求用户已绑定 XBoard 账号才能使用 AI"
+    },
+    "system_prompt": {
+      "type": "text",
+      "default": "你是 XBoard 专属 AI 客服助手。请基于提供的知识库和用户账户信息准确、简洁地回答。无法确定时请引导用户提交工单或访问官网。",
+      "label": "【AI 问答】系统提示词",
+      "description": "LLM 系统角色设定"
+    },
+    "max_history_rounds": {
+      "type": "number",
+      "default": 5,
+      "label": "【AI 问答】对话记忆轮数",
+      "description": "携带最近 N 轮对话作为上下文"
+    },
+    "max_tokens": {
+      "type": "number",
+      "default": 1024,
+      "label": "【AI 问答】回答最大输出 Token",
+      "description": "仅限制 AI 问答的输出，不限制输入；违规审核使用独立的输出额度"
+    },
+    "rate_limit_per_minute": {
+      "type": "number",
+      "default": 10,
+      "label": "【AI 问答】每分钟限流",
+      "description": "每个 chat_id 每分钟最多问答次数，不限制违规审核请求"
+    },
+    "thinking_text": {
+      "type": "string",
+      "default": "🤔 思考中，请稍候...",
+      "label": "【AI 问答】等待提示",
+      "description": "AI 处理中先发送的提示语"
+    },
+    "llm_models": {
+      "type": "text",
+      "default": "[\"gpt-4o-mini\",\"gpt-4o\",\"deepseek-chat\"]",
+      "label": "【AI 问答】可选模型列表（预留）",
+      "description": "JSON 数组；当前尚未实现 /model 切换，修改此项不会改变运行中的模型"
+    },
+    "enable_rag": {
+      "type": "boolean",
+      "default": true,
+      "label": "【知识库】启用知识库检索",
+      "description": "回答前检索系统知识库、插件配置知识库与群聊自动入库内容"
+    },
+    "custom_knowledge": {
+      "type": "text",
+      "default": "[]",
+      "label": "【知识库】自定义知识库",
+      "description": "JSON 数组，格式：[{\"title\":\"标题\",\"content\":\"正文\"}]，在插件配置页直接维护"
+    },
+    "rag_max_articles": {
+      "type": "number",
+      "default": 3,
+      "label": "【知识库】检索文章数",
+      "description": "RAG 每次最多注入的知识片段数量"
+    },
+    "enable_group_memory": {
+      "type": "boolean",
+      "default": false,
+      "label": "【群聊记忆】群聊记忆采集",
+      "description": "自动记录群内有效消息；配合「自动入库」可直接参与 RAG"
+    },
+    "group_memory_chat_ids": {
+      "type": "text",
+      "default": "[]",
+      "label": "【群聊记忆】采集群 ID 列表",
+      "description": "JSON 数组，如 [-1001234567890]；留空 [] 表示所有群"
+    },
+    "group_memory_auto_import": {
+      "type": "boolean",
+      "default": true,
+      "label": "【群聊记忆】群记忆自动入库",
+      "description": "开启后采集的群消息直接写入插件知识库参与检索；关闭则仅缓存待处理"
+    },
+    "group_memory_min_length": {
+      "type": "number",
+      "default": 10,
+      "label": "【群聊记忆】记忆最短字数",
+      "description": "低于此长度的群消息不会被采集"
+    },
+    "enable_moderation": {
+      "type": "boolean",
+      "default": false,
+      "label": "【违规审核】开启群聊 AI 审核",
+      "description": "审核超级群普通成员的文本消息，明确违规时删除并禁言；独立于 AI 问答开关。机器人必须有删除消息、限制成员权限"
+    },
+    "moderation_watch_edits": {
+      "type": "boolean",
+      "default": true,
+      "label": "【违规审核】监听消息编辑",
+      "description": "开启后重新审核超级群编辑后的文本，违规时删除并禁言；需开启群聊 AI 审核，编辑不会重复触发问答或入库"
+    },
+    "moderation_chat_ids": {
+      "type": "text",
+      "default": "[]",
+      "label": "【违规审核】审核群 ID 列表",
+      "description": "JSON 数组，如 [-1001234567890]；[] 表示所有超级群"
+    },
+    "moderation_model": {
+      "type": "string",
+      "default": "",
+      "label": "【违规审核】审核模型",
+      "description": "留空使用默认模型，共用 API 地址和 Key"
+    },
+    "moderation_rules": {
+      "type": "text",
+      "default": "禁止色情招嫖、露骨色情推广；赌博推广、下注招揽；毒品交易、制贩指导；爆炸物制作交易、爆炸袭击威胁。正常新闻、科普、反诈、禁毒和安全讨论不违规。",
+      "label": "【违规审核】群聊审核规则",
+      "description": "AI 根据这些规则判断，最多使用 4000 字符；可补充群规"
+    },
+    "moderation_confidence": {
+      "type": "number",
+      "default": 0.9,
+      "label": "【违规审核】审核置信度门槛",
+      "description": "0.5 到 1，默认 0.9；AI 明确判为违规且达到门槛才处罚，该分数为模型自评"
+    },
+    "moderation_mute_minutes": {
+      "type": "number",
+      "default": 60,
+      "label": "【违规审核】违规禁言分钟数",
+      "description": "默认 60 分钟，范围 1 到 525600 分钟"
+    },
+    "moderation_notify_admin": {
+      "type": "boolean",
+      "default": true,
+      "label": "【违规审核】违规处理私聊通知",
+      "description": "执行违规处罚后，将原消息、AI 判定、删除和禁言的实际结果发给公共配置中的通知接收人"
+    },
+    "moderation_debug": {
+      "type": "boolean",
+      "default": false,
+      "label": "【违规审核】Debug 审核通知",
+      "description": "开启后私聊通知每次 AI 审核结果及审核前置检查失败（如群成员查询失败），含具体 Telegram 错误；管理员免审不通知"
+    }
+  }
+}

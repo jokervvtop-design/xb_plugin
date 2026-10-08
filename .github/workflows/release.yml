@@ -1,0 +1,51 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag (for example v1.0.0)
+        required: true
+        default: v1.0.0
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Select tag
+        id: version
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          tag="${INPUT_TAG:-$GITHUB_REF_NAME}"
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.version.outputs.tag }}
+      - name: Verify original packages
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          cd "releases/$RELEASE_TAG"
+          sha256sum --check SHA256SUMS.txt
+      - name: Publish release with plugin packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          release_dir="releases/$RELEASE_TAG"
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --verify-tag --draft \
+              --title "xb_plugin $RELEASE_TAG" \
+              --notes-file "$release_dir/RELEASE_NOTES.md"
+          fi
+          gh release upload "$RELEASE_TAG" "$release_dir/"*.zip "$release_dir/SHA256SUMS.txt" --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --latest
