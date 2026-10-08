@@ -23,6 +23,14 @@ API 地址与 API Key 已在截图中打码。
 
 ![Telegram 群签到配置界面](docs/images/group-checkin-settings.png)
 
+## 使用实例
+
+### AI 助手实际对话
+
+查询剩余流量、了解机器人功能，以及获取账号绑定指引。
+
+![Telegram AI 助手实际对话：流量查询、功能介绍与绑定指引](docs/images/ai-assistant-chat-example.png)
+
 ## 下载与安装
 
 在本仓库的 [Releases](https://github.com/jokervvtop-design/xb_plugin/releases) 下载对应插件的 ZIP 文件，上传到 XBoard 后台插件页安装并启用。两个插件可独立安装，详细依赖、配置和限制见各插件文档。
